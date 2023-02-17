@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Ubuntu搭建GPU环境目录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu搭建">
+<meta property="og:url" content="http://example.com/2023/02/17/ubuntu-gpu/index.html">
+<meta property="og:site_name" content="HJY的博客">
+<meta property="og:description" content="Ubuntu搭建GPU环境目录">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/eb57a2c94a324a4484da7528e25fa65d.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/48df50e7e2174f32bc57b6f6a19b82bf.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/9613c8b8dda340f1ba2e6b35e096c2d9.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/368dddf8c0d242668ee65f50fc8c30d2.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/56807ff68be24d74b23acf00d1b87d62.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/541da2fda1b6404590fffd0d40abefa0.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/946cf1b405c1418097246cb86f088199.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/a426ca7f33b74bd1924c1862c4aab965.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/4013ebc05e8447e290048b4af1c5e419.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/403ca5e5c7bd4ea8b14ce2402568f8f6.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/c5b2266601ef4fa1b9b6f5bd8561fb40.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/6a17d212d94d45d4988dbaf241e0d3e9.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/7b3c35bc6b5e43a2a30e69b5971627a7.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/ef16600cb0ca47999acccba82c833d91.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/9311253492bd4e0297d9465d3e3efb75.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/57632342010d44c09fd7a952b098eeb9.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/e11e0101e3274f24b03c7c922644fcfc.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/5bd12e059a8147de87743e76c8f43784.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/d9038e10708c4e939a93fcf0c4a75ac6.png">
+<meta property="article:published_time" content="2023-02-17T02:34:30.567Z">
+<meta property="article:modified_time" content="2023-02-17T02:34:30.567Z">
+<meta property="article:author" content="telepath">
+<meta property="article:tag" content="Ubuntu">
+<meta property="article:tag" content="nvidia">
+<meta property="article:tag" content="GPU">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/eb57a2c94a324a4484da7528e25fa65d.png">
+
+<link rel="canonical" href="http://example.com/2023/02/17/ubuntu-gpu/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Ubuntu搭建 | HJY的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">HJY的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/17/ubuntu-gpu/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="telepath">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HJY的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Ubuntu搭建
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-17 10:34:30" itemprop="dateCreated datePublished" datetime="2023-02-17T10:34:30+08:00">2023-02-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/" itemprop="url" rel="index"><span itemprop="name">计算机</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E7%8E%AF%E5%A2%83/" itemprop="url" rel="index"><span itemprop="name">环境</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Ubuntu搭建GPU环境"><a href="#Ubuntu搭建GPU环境" class="headerlink" title="Ubuntu搭建GPU环境"></a>Ubuntu搭建GPU环境</h1><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a><strong>目录</strong></h2><p> 一、相关命令</br><br> 二、ubuntu18.04.6安装显卡驱动错误汇总</br><br> 三、ubuntu20.04.5搭建GPU环境</p>
+<h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a><strong>前言：</strong></h2><p>&amp;emsp;&amp;emsp;因ubuntu18.04.6安装显卡驱动时出现各种错误，本文基于重装系统后顺利成功安装显卡驱动，步骤二对18.04.6安装显卡驱动时出现的错误进行汇总，步骤三详细介绍安装流程。</br></p>
+<h2 id="一、相关命令"><a href="#一、相关命令" class="headerlink" title="一、相关命令"></a><strong>一、相关命令</strong></h2><h3 id="查看电脑配置信息"><a href="#查看电脑配置信息" class="headerlink" title="查看电脑配置信息"></a><strong>查看电脑配置信息</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#查看系统版本</span><br><span class="line">$ lsb_release -a</span><br><span class="line">#查看当前内核</span><br><span class="line">$ uname -r</span><br><span class="line">#查看当前系统中存在的内核</span><br><span class="line">$ dpkg --get-selections |grep linux-image</span><br><span class="line">#查看内核启动顺序</span><br><span class="line">$ grep menuentry /boot/grub/grub.cfg</span><br><span class="line">#查看显卡信息</span><br><span class="line">$ lscpi|grep -i vga</span><br><span class="line">$ lscpi|grep -i nvidia</span><br><span class="line">#查看当前安装的驱动</span><br><span class="line">$ dpkg --list |grep nvidia*</span><br><span class="line">$ ls /usr/src</span><br></pre></td></tr></table></figure>
+<p>也可以通过输入以下网址数字代码查询显卡型号：<br><br/><a target="_blank" rel="noopener" href="http://pci-ids.ucw.cz/mods/PC/10de?action=help?help=pci">http://pci-ids.ucw.cz/mods/PC/10de?action=help?help=pci</a><br/></p>
+<p>运行结果: 本ubuntu系统为20.04.5，内核为5.15.0-60，显卡型号为Tesla P100<br/><br><img src="https://img-blog.csdnimg.cn/eb57a2c94a324a4484da7528e25fa65d.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/48df50e7e2174f32bc57b6f6a19b82bf.png#pic_center" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/9613c8b8dda340f1ba2e6b35e096c2d9.png" alt="在这里插入图片描述"></p>
+<h2 id="二、ubuntu18-04-6安装显卡驱动错误汇总"><a href="#二、ubuntu18-04-6安装显卡驱动错误汇总" class="headerlink" title="二、ubuntu18.04.6安装显卡驱动错误汇总"></a><strong>二、ubuntu18.04.6安装显卡驱动错误汇总</strong></h2><p>内核5.4.0-139</p>
+<p>使用runfile、ppa、命令行或附加驱动安装都出现了如下问题：<br/></p>
+<ol>
+<li>signature note signed with a trusted key<br/></li>
+<li>循环登录<br/></li>
+<li>无法进入图形界面<br/></li>
+<li>重装系统安装时黑屏</li>
+<li>No devices were found<br/></li>
+</ol>
+<p>解决方法见: <a target="_blank" rel="noopener" href="https://blog.csdn.net/txmmy/article/details/128972034?spm=1001.2014.3001.5502">https://blog.csdn.net/txmmy/article/details/128972034?spm=1001.2014.3001.5502</a></p>
+<h2 id="三、ubuntu20-04-5搭建GPU环境："><a href="#三、ubuntu20-04-5搭建GPU环境：" class="headerlink" title="三、ubuntu20.04.5搭建GPU环境："></a><strong>三、ubuntu20.04.5搭建GPU环境</strong>：</h2><blockquote>
+<p>3.1 重装系统</p>
+<blockquote>
+<p>3.1.1 制作启动盘</br><br>3.1.2 修改bios设置</p>
+</blockquote>
+<p>3.2安装显卡驱动</p>
+<blockquote>
+</blockquote>
+<p>3.3安装CUDA</p>
+<blockquote>
+<p>3.3.1 安装相关依赖包</br><br>3.3.2 下载CUDA安装文件</br><br>3.3.3 安装CUDA</br><br>3.3.4 配置相关环境</br></p>
+</blockquote>
+<p>3.4安装CUDNN</p>
+</blockquote>
+<h3 id="3-1-重装系统"><a href="#3-1-重装系统" class="headerlink" title="3.1 重装系统"></a><strong>3.1 重装系统</strong></h3><h4 id="3-1-1-制作启动盘"><a href="#3-1-1-制作启动盘" class="headerlink" title="3.1.1 制作启动盘"></a><strong>3.1.1 制作启动盘</strong></h4><p>&amp;emsp;&amp;emsp;在官网下载镜像ios后，使用UltralSO制作启动U盘即可。</p>
+<h4 id="3-1-2-修改bios设置"><a href="#3-1-2-修改bios设置" class="headerlink" title="3.1.2 修改bios设置"></a><strong>3.1.2 修改bios设置</strong></h4><p>&amp;emsp;&amp;emsp;根据NVIDIA官方提供的文档，我们需要禁用安全启动和nouveau，以防linux自带的nouveau驱动出来捣乱，本文使用华硕主板。<br><img src="https://img-blog.csdnimg.cn/368dddf8c0d242668ee65f50fc8c30d2.png" alt="在这里插入图片描述"></br><br>1.禁用安全启动</br><br>&amp;emsp;&amp;emsp;开机时连续按F2进入BOIS界面，由于安全启动选项是灰色的，不能直接修改，需要进行如下操作:</br><br>&amp;emsp;&amp;emsp;启动-&gt;快速启动-&gt;disabled-&gt;安全启动菜单(secure boot)-&gt;操作系统类型:其他操作系统-&gt;密钥管理-&gt;清除安全启动密钥-&gt;将安全启动禁用-&gt;按下F10保存退出<br/><br>2.启用above 4G 解码<br/><br>3.禁用CSM  <br/><br>4.修改启动项<br/><br>&amp;emsp;&amp;emsp;将UEFI:USB设置为最优先级，按下F10保存并退出，进入safe graphics模式安装。</p>
+<h3 id="3-2-安装显卡驱动"><a href="#3-2-安装显卡驱动" class="headerlink" title="3.2 安装显卡驱动"></a><strong>3.2 安装显卡驱动</strong></h3><p>安装系统时会自动装好驱动，如图所示，系统匹配的驱动版本为525。</br><br><img src="https://img-blog.csdnimg.cn/56807ff68be24d74b23acf00d1b87d62.png" alt="在这里插入图片描述"></p>
+<p>安装成功后重启，无需手动禁用nouveau，因为输入lsmo|grep nouveau不会显示内容</p>
+<p>通过下面三个途径可验证驱动是否安装成功</p>
+<p><img src="https://img-blog.csdnimg.cn/541da2fda1b6404590fffd0d40abefa0.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/946cf1b405c1418097246cb86f088199.png#pic_center" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/a426ca7f33b74bd1924c1862c4aab965.png#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="3-3-安装CUDA"><a href="#3-3-安装CUDA" class="headerlink" title="3.3 安装CUDA"></a><strong>3.3 安装CUDA</strong></h3><h4 id="3-3-1-安装依赖包"><a href="#3-3-1-安装依赖包" class="headerlink" title="3.3.1 安装依赖包"></a><strong>3.3.1 安装依赖包</strong></h4><p>在安装前务必下载所需要的依赖包</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt install ffmpeg unzip axel g++ build-essential make cmake pkg-config libgtk2.0-dev libjpeg-dev libtiff5-dev libavresample-dev libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev libdc1394-22-dev libv4l-dev</span><br></pre></td></tr></table></figure>
+<p>这里可能出现“无法修正错误，因为您要求某些软件包保持现状…”执行下面命令后，打开软件和更新，关闭重新载入，使其更新软件缓存。</br></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ sudo vim /etc/apt/sources.list</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">$ sudo apt-get update</span><br></pre></td></tr></table></figure>
+
+
+<p>若不安装依赖包，安装cuda时会出现<br><br><img src="https://img-blog.csdnimg.cn/4013ebc05e8447e290048b4af1c5e419.png#pic_center" alt="在这里插入图片描述"></p>
+<p>1.ffmpeg<br/><br>2.unzip<br/><br>3.axel<br/><br>4.g++(gcc)<br/><br>5.build-essential<br/><br>6.make<br/><br>7.cmake<br/><br>8.pkg-config<br><br>9.libgtk2.0-dev<br/><br>10.libjpeg-dev<br/><br>11.libtiff5-dev<br/><br>12.libavresample-dev<br/><br>13.libgstreamer-plugins-base1.0-dev<br/><br>14.libgstreamer1.0-dev<br/><br>15.libdc1394-22-dev<br/><br>16.libv4l-dev</p>
+<h4 id="3-3-2-下载CUDA安装文件"><a href="#3-3-2-下载CUDA安装文件" class="headerlink" title="3.3.2 下载CUDA安装文件"></a><strong>3.3.2 下载CUDA安装文件</strong></h4><p>cuda下载链接: <a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-downloads">https://developer.nvidia.com/cuda-downloads</a><br><img src="https://img-blog.csdnimg.cn/403ca5e5c7bd4ea8b14ce2402568f8f6.png" alt="在这里插入图片描述"><br></br>最好选用runfile进行安装，使用前两者会自动执行sudo apt-get install -y nvidia覆盖更新前面的驱动。<br/></p>
+<p>按照官方给出安装命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ wget https://developer.download.nvidia.com/compute/cuda/12.0.1/local_installers/cuda_12.0.1_525.85.12_linux.run</span><br></pre></td></tr></table></figure>
+<h4 id="3-3-3-安装CUDA"><a href="#3-3-3-安装CUDA" class="headerlink" title="3.3.3 安装CUDA"></a><strong>3.3.3 安装CUDA</strong></h4><h4 id="1-执行命令"><a href="#1-执行命令" class="headerlink" title="1.执行命令"></a><strong>1.执行命令</strong></h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo sh cuda_12.0.1_525.85.12_linux.run</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/c5b2266601ef4fa1b9b6f5bd8561fb40.png" alt="在这里插入图片描述"><br/><br><img src="https://img-blog.csdnimg.cn/6a17d212d94d45d4988dbaf241e0d3e9.png" alt="在这里插入图片描述"><br/><br><img src="https://img-blog.csdnimg.cn/7b3c35bc6b5e43a2a30e69b5971627a7.png" alt="在这里插入图片描述"><br/><br><img src="https://img-blog.csdnimg.cn/ef16600cb0ca47999acccba82c833d91.png" alt="在这里插入图片描述"></p>
+<h4 id="2-检验结果"><a href="#2-检验结果" class="headerlink" title="2. 检验结果"></a><strong>2. 检验结果</strong></h4><p>查看安装的版本信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cat /usr/local/cuda/version.json</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/9311253492bd4e0297d9465d3e3efb75.png" alt="在这里插入图片描述"><br><br>查看是否安装成功</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cd /usr/local/cuda/samples/1_Utilities/deviceQuery</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo make</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./deviceQuery</span><br></pre></td></tr></table></figure>
+<p>运行后输出如下，并且最后有“PASS”字样<br><br><img src="https://img-blog.csdnimg.cn/57632342010d44c09fd7a952b098eeb9.png" alt="在这里插入图片描述"></p>
+<h4 id="3-3-4-配置cuda相关环境变量"><a href="#3-3-4-配置cuda相关环境变量" class="headerlink" title="3.3.4 配置cuda相关环境变量"></a><strong>3.3.4 配置cuda相关环境变量</strong></h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo -i</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo gedit /etc/profile</span><br></pre></td></tr></table></figure>
+<p>*<em>注意~&#x2F;.bashrc和&#x2F;etc&#x2F;profile的区别</em></p>
+<p>在文件中添加如下内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export PATH=&quot;/usr/local/cuda/bin:$PATH&quot;</span><br><span class="line">export LD_LIBRARY_PATH=&quot;/usr/local/cuda/lib64:$LD_LIBRARY_PATH&quot;</span><br></pre></td></tr></table></figure>
+<p>执行生效</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ source /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p>验证环境变量</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ nvcc -V</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/e11e0101e3274f24b03c7c922644fcfc.png" alt="在这里插入图片描述"></p>
+<h3 id="3-4-安装CUDNN"><a href="#3-4-安装CUDNN" class="headerlink" title="3.4 安装CUDNN"></a><strong>3.4 安装CUDNN</strong></h3><h4 id="3-4-1-获取安装包并解压"><a href="#3-4-1-获取安装包并解压" class="headerlink" title="3.4.1 获取安装包并解压"></a><strong>3.4.1 获取安装包并解压</strong></h4><p>进入<a target="_blank" rel="noopener" href="https://developer.nvidia.com/rdp/cudnn-archive">cudnn官网下载</a><br/><br><img src="https://img-blog.csdnimg.cn/5bd12e059a8147de87743e76c8f43784.png" alt="在这里插入图片描述"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ tar -xvf cudnn-linux-x86_64-8.3.3.40_cuda11.5-archive.tar.xz</span><br></pre></td></tr></table></figure>
+<h4 id="3-4-2-复制"><a href="#3-4-2-复制" class="headerlink" title="3.4.2 复制"></a><strong>3.4.2 复制</strong></h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cd cudnn-linux-x86_64-8.3.3.40_cuda11.5-archive</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo cp include/cudnn*.h /usr/local/cuda/include</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo cp -P lib/libcudnn* /usr/local/cuda/lib64</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo chmod a+r /usr/local/cuda/include/cudnn*.h /usr/local/cuda/lib64/libcudnn*</span><br></pre></td></tr></table></figure>
+<h4 id="3-4-3-验证"><a href="#3-4-3-验证" class="headerlink" title="3.4.3 验证"></a><strong>3.4.3 验证</strong></h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cat /usr/local/cuda/include/cudnn_version.h</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/d9038e10708c4e939a93fcf0c4a75ac6.png" alt="在这里插入图片描述"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Ubuntu/" rel="tag"># Ubuntu</a>
+              <a href="/tags/nvidia/" rel="tag"># nvidia</a>
+              <a href="/tags/GPU/" rel="tag"># GPU</a>
+          </div>
+
+        
+
+
+        
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Ubuntu%E6%90%AD%E5%BB%BAGPU%E7%8E%AF%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">Ubuntu搭建GPU环境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-number">1.1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80%EF%BC%9A"><span class="nav-number">1.2.</span> <span class="nav-text">前言：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="nav-number">1.3.</span> <span class="nav-text">一、相关命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E7%94%B5%E8%84%91%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF"><span class="nav-number">1.3.1.</span> <span class="nav-text">查看电脑配置信息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81ubuntu18-04-6%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E9%94%99%E8%AF%AF%E6%B1%87%E6%80%BB"><span class="nav-number">1.4.</span> <span class="nav-text">二、ubuntu18.04.6安装显卡驱动错误汇总</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81ubuntu20-04-5%E6%90%AD%E5%BB%BAGPU%E7%8E%AF%E5%A2%83%EF%BC%9A"><span class="nav-number">1.5.</span> <span class="nav-text">三、ubuntu20.04.5搭建GPU环境：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E9%87%8D%E8%A3%85%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.5.1.</span> <span class="nav-text">3.1 重装系统</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-1-%E5%88%B6%E4%BD%9C%E5%90%AF%E5%8A%A8%E7%9B%98"><span class="nav-number">1.5.1.1.</span> <span class="nav-text">3.1.1 制作启动盘</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-2-%E4%BF%AE%E6%94%B9bios%E8%AE%BE%E7%BD%AE"><span class="nav-number">1.5.1.2.</span> <span class="nav-text">3.1.2 修改bios设置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8"><span class="nav-number">1.5.2.</span> <span class="nav-text">3.2 安装显卡驱动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E5%AE%89%E8%A3%85CUDA"><span class="nav-number">1.5.3.</span> <span class="nav-text">3.3 安装CUDA</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-1-%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96%E5%8C%85"><span class="nav-number">1.5.3.1.</span> <span class="nav-text">3.3.1 安装依赖包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-2-%E4%B8%8B%E8%BD%BDCUDA%E5%AE%89%E8%A3%85%E6%96%87%E4%BB%B6"><span class="nav-number">1.5.3.2.</span> <span class="nav-text">3.3.2 下载CUDA安装文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-3-%E5%AE%89%E8%A3%85CUDA"><span class="nav-number">1.5.3.3.</span> <span class="nav-text">3.3.3 安装CUDA</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4"><span class="nav-number">1.5.3.4.</span> <span class="nav-text">1.执行命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E6%A3%80%E9%AA%8C%E7%BB%93%E6%9E%9C"><span class="nav-number">1.5.3.5.</span> <span class="nav-text">2. 检验结果</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-4-%E9%85%8D%E7%BD%AEcuda%E7%9B%B8%E5%85%B3%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">1.5.3.6.</span> <span class="nav-text">3.3.4 配置cuda相关环境变量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E5%AE%89%E8%A3%85CUDNN"><span class="nav-number">1.5.4.</span> <span class="nav-text">3.4 安装CUDNN</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-1-%E8%8E%B7%E5%8F%96%E5%AE%89%E8%A3%85%E5%8C%85%E5%B9%B6%E8%A7%A3%E5%8E%8B"><span class="nav-number">1.5.4.1.</span> <span class="nav-text">3.4.1 获取安装包并解压</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-2-%E5%A4%8D%E5%88%B6"><span class="nav-number">1.5.4.2.</span> <span class="nav-text">3.4.2 复制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-3-%E9%AA%8C%E8%AF%81"><span class="nav-number">1.5.4.3.</span> <span class="nav-text">3.4.3 验证</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">telepath</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/telepathHJY" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;telepathHJY" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">telepath</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
