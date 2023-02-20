@@ -115,7 +115,7 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">10</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">12</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -125,7 +125,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">4</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">5</span></a>
 
   </li>
   </ul>
@@ -151,6 +151,96 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/16/yolov%E6%90%AD%E5%BB%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="telepath">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HJY的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/02/16/yolov%E6%90%AD%E5%BB%BA/" class="post-title-link" itemprop="url">yolo搭建</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-16 15:40:35" itemprop="dateCreated datePublished" datetime="2023-02-16T15:40:35+08:00">2023-02-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-02-20 16:21:21" itemprop="dateModified" datetime="2023-02-20T16:21:21+08:00">2023-02-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/" itemprop="url" rel="index"><span itemprop="name">计算机</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E7%8E%AF%E5%A2%83/" itemprop="url" rel="index"><span itemprop="name">环境</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>ubuntu22.04.5LTS<br>gpu:NVIDIA Corporation GP100GL[Tesla P100 16GB]<br>总结：<br>使用yolo有两个途径</p>
+<ol>
+<li>opencv+yolo.weight<br>使用yolov4前需要搭建opencv:<a target="_blank" rel="noopener" href="https://heqingchun.blog.csdn.net/article/details/127020710?spm=1001.2014.3001.5506">教程:ubuntu下搭建opencv</a></li>
+<li>python+yolo<br>  （1）安装anaconda以及torch<br>  （2）下载yolov5源代码<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/ultralytics/yolov5</span><br><span class="line">cd yolov5</span><br><span class="line">pip install -r requirements.txt</span><br></pre></td></tr></table></figure>
+或从github下载 <a target="_blank" rel="noopener" href="https://gitcode.net/mirrors/ultralytics/yolov5">yolov5-gihub</a> 然后执行下面指令</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/02/16/yolov%E6%90%AD%E5%BB%BA/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -272,7 +362,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-18 00:23:21" itemprop="dateModified" datetime="2023-02-18T00:23:21+08:00">2023-02-18</time>
+                <time title="修改时间：2023-02-20 14:51:45" itemprop="dateModified" datetime="2023-02-20T14:51:45+08:00">2023-02-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -303,7 +393,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a><strong>目录</strong></h2><p> 一、相关命令<br> 二、ubuntu18.04.6安装显卡驱动错误汇总<br> 三、ubuntu20.04.5搭建GPU环境</p>
+          <style>
+img{
+    display:block
+}
+</style>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a><strong>目录</strong></h2><p> 一、相关命令<br> 二、ubuntu18.04.6安装显卡驱动错误汇总<br> 三、ubuntu20.04.5搭建GPU环境</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/02/06/ubuntu-gpu/#more" rel="contents">
@@ -566,7 +661,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -579,7 +674,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
