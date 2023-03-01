@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="一、项目介绍1.1 背景">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tensorflow实现猫狗图像识别">
+<meta property="og:url" content="http://example.com/2023/02/13/%E9%A1%B9%E7%9B%AE-%E7%8C%AB%E7%8B%97%E8%AF%86%E5%88%AB/index.html">
+<meta property="og:site_name" content="HJY的博客">
+<meta property="og:description" content="一、项目介绍1.1 背景">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-02-13T07:40:35.000Z">
+<meta property="article:modified_time" content="2023-03-01T02:35:07.081Z">
+<meta property="article:author" content="telepath">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="图像挖掘">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2023/02/13/%E9%A1%B9%E7%9B%AE-%E7%8C%AB%E7%8B%97%E8%AF%86%E5%88%AB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>tensorflow实现猫狗图像识别 | HJY的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">HJY的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">7</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">8</span></a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/13/%E9%A1%B9%E7%9B%AE-%E7%8C%AB%E7%8B%97%E8%AF%86%E5%88%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="telepath">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HJY的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          tensorflow实现猫狗图像识别
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-13 15:40:35" itemprop="dateCreated datePublished" datetime="2023-02-13T15:40:35+08:00">2023-02-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-01 10:35:07" itemprop="dateModified" datetime="2023-03-01T10:35:07+08:00">2023-03-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/" itemprop="url" rel="index"><span itemprop="name">计算机</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="一、项目介绍"><a href="#一、项目介绍" class="headerlink" title="一、项目介绍"></a>一、项目介绍</h2><h3 id="1-1-背景"><a href="#1-1-背景" class="headerlink" title="1.1 背景"></a>1.1 背景</h3><p>　　目的实现猫狗图像的高准确度智能分类。材料图像数据集datasets中包含训练数据集(train)和测试数据集(test)。train文件夹中共有10000张图像，其中猫狗各5000张。test文件夹中共有1000张图像，其中猫狗各500张。所有图像已经按”类别.序号.格式”的形式命名（即图像文件名的前3位字符是该图像的类别标记），如图1-1所示。</p>
+<div align="center"><img src = 'https://s3.bmp.ovh/imgs/2023/02/28/5f7b9d25e390c6b9.png' width="120" height="150" align="center" ></div>
+<center>图1-1 数据集目录预览</center>
+
+<h3 id="1-2-实验环境"><a href="#1-2-实验环境" class="headerlink" title="1.2 实验环境"></a>1.2 实验环境</h3><center>表1-1 实验环境配置表</center>
+<div align="center"><img src = 'https://s3.bmp.ovh/imgs/2023/03/01/aae6ecacd2f91aa4.png' width="350" height="200"></div>
+
+<h3 id="1-3-文件结构"><a href="#1-3-文件结构" class="headerlink" title="1.3 文件结构"></a>1.3 文件结构</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">----CatAndDog\</span><br><span class="line">    |----utils\</span><br><span class="line">    |    |----dataio.py       #读取图像，存储为csv</span><br><span class="line">    |    |----loaddata.py     #加载图像</span><br><span class="line">    |    |----plolfunction.py #绘制图表</span><br><span class="line">    |    |----createModels.py #构建模型     </span><br><span class="line">    |    |----viewImage.py    #测试文件</span><br><span class="line">    |----imgs\                #存放图像预处理、图像增强后生成的文件</span><br><span class="line">    |----logs\                #存放tensorboard生成的日志</span><br><span class="line">    |----models\              #存放训练的模型</span><br><span class="line">    |----main.py              #主程序</span><br><span class="line">    |----loadmodel.py         #加载模型，预测结果</span><br><span class="line"></span><br><span class="line">```    </span><br><span class="line">### 1.4 实现思路</span><br><span class="line"> 　　　对图像进行归一化、标准化、平滑处理等预处理和图像增强，使用resetNet34、vgg16、改进的vgg16构建模型，最后用混淆矩阵评估模型。</span><br><span class="line">&lt;!-- &lt;img src = &#x27;https://s3.bmp.ovh/imgs/2023/02/28/14851219838de6ae.png&#x27; &gt; --&gt;</span><br><span class="line"></span><br><span class="line">## 二、数据流转换</span><br><span class="line">将图像转换为csv格式的数据流（dataio.py）</span><br></pre></td></tr></table></figure>
+<p>import os<br>import pandas as pd</p>
+<p>def dataio(open_path,save_path):<br>    images&#x3D;[]<br>    labels&#x3D;[]<br>    for root,_,filenames in os.walk(open_path):<br>        root&#x3D;root[1:len(root)]<br>        for filename in filenames:<br>            image_path&#x3D;os.path.join(root,filename)<br>            images.append(image_path)<br>            s&#x3D;filename[0:3]<br>            labels.append(s)<br>    dataframe&#x3D;pd.DataFrame({‘image’:images,”label”:labels})<br>    dataframe.to_csv(save_path,index&#x3D;False)</p>
+<p>dataio(‘..&#x2F;datasets&#x2F;test’,’..&#x2F;datasets&#x2F;testinfo.csv’)<br>dataio(‘..&#x2F;datasets&#x2F;train’,’..&#x2F;datasets&#x2F;traininfo.csv’)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">存储格式如图2-1所示</span><br><span class="line">&lt;img src = &#x27;https://s3.bmp.ovh/imgs/2023/03/01/ffa552e75f1147a4.png&#x27; width=&quot;200&quot; height=&quot;150&quot;&gt;</span><br><span class="line">&lt;center&gt;图2-1 数据流存储预览&lt;/center&gt;</span><br><span class="line"></span><br><span class="line">## 三、数据预处理</span><br><span class="line">### 3.1 原始图像</span><br><span class="line">从数据集中任意取出一张图像进行预处理测试，原始图像及对应矩阵如图3-1、3-2所示：</span><br><span class="line"></span><br><span class="line">&lt;div align=&quot;center&quot;&gt;&lt;img src = &#x27;https://s3.bmp.ovh/imgs/2023/03/01/562a615a1d225846.png&#x27; &gt;&lt;/div&gt;</span><br><span class="line">&lt;center&gt;图3-1&lt;/center&gt;</span><br><span class="line">&lt;div align=&quot;center&quot;&gt;&lt;img src = &#x27;https://s3.bmp.ovh/imgs/2023/03/01/c3776c07d6bf520b.png&#x27; &gt;&lt;/div&gt;</span><br><span class="line">&lt;center&gt;图3-2&lt;/center&gt;</span><br><span class="line">读取图像代码(viewImage.py)：</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>import cv2<br>import numpy as np<br>from tensorflow.keras.preprocessing.image import ImageDataGenerator<br>from tensorflow.keras.preprocessing.image import array_to_img</p>
+<p>im&#x3D;cv2.imread(r’..&#x2F;imgs&#x2F;cat.4.jpg’)<br>im&#x3D; cv2.cvtColor(im, cv2.COLOR_BGR2RGB)<br>im &#x3D; np.expand_dims(im, 0)<br>datagen &#x3D; ImageDataGenerator()<br>查看图像：<br>times&#x3D;1<br>i &#x3D; 0<br>for batch in datagen.flow(im, batch_size&#x3D;1):<br>    plt.imshow(array_to_img(np.squeeze(batch)))<br>    i +&#x3D; 1<br>    if i&#x3D;&#x3D;times:<br>        plt.show()<br>        break</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 3.2 归一化</span><br><span class="line">因归一化具有不变特性，此处不展示归一化后的效果图，归一化后的矩阵发生如下变化：</span><br></pre></td></tr></table></figure>
+<p>datagen &#x3D; ImageDataGenerator(rescale&#x3D;1.&#x2F;255.)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;div align=&quot;center&quot;&gt;&lt;img src = &#x27;https://s3.bmp.ovh/imgs/2023/03/01/62b6724c8c03b6f2.png&#x27; &gt;&lt;/div&gt;</span><br><span class="line">&lt;center&gt;图3-3 归一化矩阵&lt;/center&gt;</span><br><span class="line"></span><br><span class="line">### 3.3 标准化</span><br><span class="line">定义一个zscore标准化，放入图像生成器的自定义函数中。</span><br></pre></td></tr></table></figure>
+<p>def zscore(image):<br>    image_zs &#x3D; (image - np.mean(image)) &#x2F; np.std(image)<br>    return image_zs<br>datagen &#x3D; ImageDataGenerator(preprocessing_function&#x3D;zscore)<br>或：<br>datagen &#x3D; ImageDataGenerator(preprocessing_function&#x3D;tf.image.per_image_standardization)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;div align=&quot;center&quot;&gt;&lt;img src = &#x27;https://s3.bmp.ovh/imgs/2023/03/01/f536c04815e32a91.png&#x27; &gt;&lt;/div&gt;</span><br><span class="line">&lt;center&gt;图3-4 标准化矩阵&lt;/center&gt;</span><br><span class="line"> </span><br><span class="line"> ### 3.4 数据增强</span><br><span class="line">根据生成器自带的函数进行几何变换，设置随机通道转换范围为10，随机旋转角度为10，变焦范围0.2，随机输竖直平移幅度为0.2。</span><br></pre></td></tr></table></figure>
+<p>datagen &#x3D; ImageDataGenerator(channel_shift_range&#x3D;10,rotation_range&#x3D;10,  # 随机转动的最大角度zoom_range&#x3D;0.2,  # 随机缩放的最大幅度 height_shift_range&#x3D;0.2)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;div align=&quot;center&quot;&gt;&lt;img src = &#x27;https://s3.bmp.ovh/imgs/2023/03/01/0a3c94e449697027.jpg&#x27; &gt;&lt;/div&gt;</span><br><span class="line">&lt;center&gt;图3-5 几何转换效果图&lt;/center&gt;</span><br><span class="line"></span><br><span class="line">### 3.5 均值滤波</span><br><span class="line">使用4*4的均值滤波进行图像平滑处理，效果如图3-5所示。</span><br></pre></td></tr></table></figure>
+<p>def MeanFilter(img, K_size&#x3D;4):<br>    h, w, c &#x3D; img.shape<br>    pad &#x3D; K_size &#x2F;&#x2F; 2<br>    out &#x3D; np.zeros((h + 2 * pad, w + 2 * pad, c), dtype&#x3D;np.float)<br>    out[pad:pad + h, pad:pad + w] &#x3D; img.copy().astype(np.float)<br>    tmp &#x3D; out.copy()<br>    for y in range(h):<br>        for x in range(w):<br>            for ci in range(c):<br>                out[pad + y, pad + x, ci] &#x3D; np.mean(tmp[y:y + K_size, x:x + K_size, ci])</p>
+<pre><code>out = out[pad:pad + h, pad:pad + w].astype(np.uint8)
+return out
+</code></pre>
+<p>datagen &#x3D; ImageDataGenerator(preprocessing_function&#x3D;MeanFilter)</p>
+<p>&#96;&#96;&#96;</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>图像增强：<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/bf02jgtrs00xktcx/article/details/103154265">https://blog.csdn.net/bf02jgtrs00xktcx/article/details/103154265</a></p>
+<p>resnet34结构:<br><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/20200208191748915.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2pjbGlhbjkx,size_16,color_FFFFFF,t_70">https://img-blog.csdnimg.cn/20200208191748915.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2pjbGlhbjkx,size_16,color_FFFFFF,t_70</a></p>
+<p>不同卷积层介绍：<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/117260363?utm_source=wechat_session">https://zhuanlan.zhihu.com/p/117260363?utm_source&#x3D;wechat_session</a></p>
+<p> 数据增强参考：<br> <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/361400805">https://zhuanlan.zhihu.com/p/361400805</a></p>
+<p> 调参参考：<br> <a target="_blank" rel="noopener" href="https://www.zhihu.com/question/452410923/answer/2157005791">https://www.zhihu.com/question/452410923/answer/2157005791</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+              <a href="/tags/%E5%9B%BE%E5%83%8F%E6%8C%96%E6%8E%98/" rel="tag"># 图像挖掘</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/02/06/ubuntu-gpu/" rel="prev" title="Ubuntu搭建NVIDIA驱动、CUDA、CUDNN及错误汇总">
+      <i class="fa fa-chevron-left"></i> Ubuntu搭建NVIDIA驱动、CUDA、CUDNN及错误汇总
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/02/13/%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5-FRP%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" rel="next" title="远程连接-FRP内网穿透">
+      远程连接-FRP内网穿透 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E9%A1%B9%E7%9B%AE%E4%BB%8B%E7%BB%8D"><span class="nav-text">一、项目介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E8%83%8C%E6%99%AF"><span class="nav-text">1.1 背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83"><span class="nav-text">1.2 实验环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="nav-text">1.3 文件结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-text">参考资料</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">telepath</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/telepathHJY" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;telepathHJY" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">telepath</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">14k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">13 分钟</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+   
+<script>
+  var OriginTitile = document.title;
+  var titleTime;
+  document.addEventListener("visibilitychange", function() {
+    if (document.hidden) {
+      document.title = "(つェ⊂)我藏好了哦~" + OriginTitile;
+      clearTimeout(titleTime);
+    } else {
+      document.title = "(*´∇｀*) 被你发现啦~" + OriginTitile;
+      titleTime = setTimeout(function() {
+        document.title = OriginTitile;
+      }, 2000);
+    }
+  });
+</script>
+
+
+</body>
+</html>
