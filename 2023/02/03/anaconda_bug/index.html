@@ -22,14 +22,14 @@
 
   <meta name="description" content="创建虚拟环境并激活后 12$ conda create -n tensorflow python&#x3D;3.9$ conda activate tensorflow">
 <meta property="og:type" content="article">
-<meta property="og:title" content="anaconda安装tensorflow-gpu遇到的问题">
+<meta property="og:title" content="Ubuntu下anaconda安装tensorflow-gpu遇到的问题">
 <meta property="og:url" content="http://example.com/2023/02/03/anaconda_bug/index.html">
 <meta property="og:site_name" content="HJY的博客">
 <meta property="og:description" content="创建虚拟环境并激活后 12$ conda create -n tensorflow python&#x3D;3.9$ conda activate tensorflow">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/865ab13d0a354543ba64527eb0e53b61.png">
 <meta property="article:published_time" content="2023-02-03T09:17:35.000Z">
-<meta property="article:modified_time" content="2023-02-27T02:32:27.382Z">
+<meta property="article:modified_time" content="2023-04-05T11:38:40.264Z">
 <meta property="article:author" content="telepath">
 <meta property="article:tag" content="python">
 <meta property="article:tag" content="anaconda">
@@ -50,7 +50,7 @@
   };
 </script>
 
-  <title>anaconda安装tensorflow-gpu遇到的问题 | HJY的博客</title>
+  <title>Ubuntu下anaconda安装tensorflow-gpu遇到的问题 | HJY的博客</title>
   
 
 
@@ -134,7 +134,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">8</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">9</span></a>
 
   </li>
   </ul>
@@ -178,7 +178,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          anaconda安装tensorflow-gpu遇到的问题
+          Ubuntu下anaconda安装tensorflow-gpu遇到的问题
         </h1>
 
         <div class="post-meta">
@@ -195,7 +195,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-27 10:32:27" itemprop="dateModified" datetime="2023-02-27T10:32:27+08:00">2023-02-27</time>
+                <time title="修改时间：2023-04-05 19:38:40" itemprop="dateModified" datetime="2023-04-05T19:38:40+08:00">2023-04-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -207,11 +207,11 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E7%8E%AF%E5%A2%83/" itemprop="url" rel="index"><span itemprop="name">环境</span></a>
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E8%B8%A9%E5%9D%91%E9%9B%86%E5%90%88/" itemprop="url" rel="index"><span itemprop="name">踩坑集合</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E8%B8%A9%E5%9D%91%E9%9B%86%E5%90%88/" itemprop="url" rel="index"><span itemprop="name">踩坑集合</span></a>
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E7%8E%AF%E5%A2%83/" itemprop="url" rel="index"><span itemprop="name">环境</span></a>
                 </span>
             </span>
 
@@ -221,7 +221,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>885</span>
+              <span>761</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -259,10 +259,8 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line">import torch</span><br><span class="line">torch.__version__</span><br></pre></td></tr></table></figure>
 <p>查看是否调用gpu</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(torch.cuda.is_available())</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><figcaption><span>install torch torchvision torchaudio --extra-index-url</span><a target="_blank" rel="noopener" href="https://download.pytorch.org/whl/cu113">(使用该装法，yolov5-master下的python detect.py会报错)</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line">改用</span><br></pre></td></tr></table></figure>
-<p>pip install torch&#x3D;&#x3D;1.12.0+cu113 torchvision&#x3D;&#x3D;0.13.0+cu113 torchaudio&#x3D;&#x3D;0.12.0 –extra-index-url <a target="_blank" rel="noopener" href="https://download.pytorch.org/whl/cu113">https://download.pytorch.org/whl/cu113</a></p>
-<pre><code>
-</code></pre>
+<p>改用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install torch==1.12.0+cu113 torchvision==0.13.0+cu113 torchaudio==0.12.0 --extra-index-url https://download.pytorch.org/whl/cu113</span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -287,8 +285,8 @@
       <i class="fa fa-chevron-left"></i> Django学习笔记(一)
     </a></div>
       <div class="post-nav-item">
-    <a href="/2023/02/06/ubuntu-gpu/" rel="next" title="Ubuntu搭建NVIDIA驱动、CUDA、CUDNN及错误汇总">
-      Ubuntu搭建NVIDIA驱动、CUDA、CUDNN及错误汇总 <i class="fa fa-chevron-right"></i>
+    <a href="/2023/02/06/ubuntu-gpu/" rel="next" title="Ubuntu下搭建NVIDIA驱动、CUDA、CUDNN及错误汇总">
+      Ubuntu下搭建NVIDIA驱动、CUDA、CUDNN及错误汇总 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -362,7 +360,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -416,12 +414,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">14k</span>
+    <span title="站点总字数">23k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">13 分钟</span>
+    <span title="站点阅读时长">21 分钟</span>
 </div>
 
         
